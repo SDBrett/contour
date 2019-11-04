@@ -2,7 +2,9 @@
 set -e # halt script on error
 
 cd ./site
-
+gem install bundler
+gem install html-proofer
+gem install jekyll -v 3.8.5
 bundle install
 jekyll build
 htmlproofer ./_site --disable-external --empty-alt-ignore
