@@ -2,5 +2,6 @@
 set -e # halt script on error
 
 cd ./site
-bundle exec jekyll build
-bundle exec htmlproofer ./_site --disable-external --empty-alt-ignore
+
+jekyll build
+htmlproofer ./_site --disable-external --empty-alt-ignore
