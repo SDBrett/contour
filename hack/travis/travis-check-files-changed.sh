@@ -1,0 +1,39 @@
+# Checks if the files changed in the last commit are contained within specifed directories.
+# This is used to determine if a job should run based on changes within a commit
+# PATHS_TO_SEARCH can be a single path "site" or multipl paths "site hack", response if for any path specified.
+# Add to a job within .travis.yml
+#      env:
+#        - SEARCH_DIRECTORIES="site"
+#      before_install:
+#        - chmod +x ./hack/travis/travis-check-files-changed.sh
+#      install:
+#        - ./hack/travis/travis-check-files-changed.sh $SEARCH_DIRECTORIES ; RETURN_CODE=$? ; if [ $RETURN_CODE -eq 137 ]; then travis_terminate 0; elif [ $RETURN_CODE -ne 0 ]; then travis_terminate $RETURN_CODE; fi
+
+
+# 1. Get all the arguments of the script
+# https://unix.stackexchange.com/a/197794
+PATHS_TO_SEARCH="$*"
+
+# 2. Make sure the paths to search are not empty
+if [ -z "$PATHS_TO_SEARCH" ]; then
+    echo "Please provide the paths to search for."
+    echo "Example usage:"
+    echo "./exit-if-path-not-changed.sh path/to/dir1 path/to/dir2"
+    exit 1
+fi
+
+# 3. Get the latest commit
+LATEST_COMMIT=$(git rev-parse HEAD)
+
+# 4. Get the latest commit in the searched paths
+LATEST_COMMIT_IN_PATH=$(git log -1 --format=format:%H --full-diff $PATHS_TO_SEARCH)
+
+if [ $LATEST_COMMIT != $LATEST_COMMIT_IN_PATH ]; then
+    echo "Exiting this job because code in the following paths have not changed:"
+    echo $PATHS_TO_SEARCH
+    exit 137
+fi
+
+echo "Changes detected in the following paths:"
+echo $PATHS_TO_SEARCH
+exit 0
