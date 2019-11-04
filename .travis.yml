@@ -38,7 +38,8 @@ matrix:
             - libcurl4-openssl-dev
       before_install:
         - gem install bundler
-        - bundle install --gemfile ./ciscripts/site-proofing/Gemfile
+        - gem install htmlproofer
+        - gem install jekyll -v 3.8.5
       before_script:
         - chmod +x ./ciscripts/site-proofing/cibuild
       script:
