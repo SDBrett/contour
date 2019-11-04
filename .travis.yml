@@ -39,4 +39,4 @@ matrix:
       before_script:
         - chmod +x ./ciscripts/site-proofing
       script:
-        - ./ciscripts/site-proofing
+        - ./ciscripts/site-proofing/cibuild
