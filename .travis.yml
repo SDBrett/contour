@@ -1,17 +1,27 @@
-language: go
-
-go:
-  - 1.13.x
-
-sudo: false
-
-cache:
-  directories:
-  - /home/travis/.cache/go-build
-  - /home/travis/gopath/pkg/mod
-
-env:
-  - GOPROXY=https://proxy.golang.org/
-
-script:
-  - make check
+matrix:
+  include:
+    - language: go
+      name: test make process
+      go:
+        - 1.13.x
+      sudo: false
+      cache:
+        directories:
+          - /home/travis/.cache/go-build
+          - /home/travis/gopath/pkg/mod
+      env:
+        - GOPROXY=https://proxy.golang.org/
+      script:
+        - make check
+    - language: ruby
+      cache: bundler
+      name: ruby vuln test
+      rvm: 2.6
+      before_install:
+        - gem install bundler
+        - gem install bundler-audit
+      script:
+        - cd ./site
+        - bundler install
+        - bundle-audit update
+        - bundle-audit check
