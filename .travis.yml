@@ -13,15 +13,30 @@ matrix:
         - GOPROXY=https://proxy.golang.org/
       script:
         - make check
+
     - language: ruby
-      cache: bundler
-      name: ruby vuln test
       rvm: 2.6
-      before_install:
-        - gem install bundler
-        - gem install bundler-audit
+      name: Site gem vulnerability check
+      sudo: false # route your build to the container-based infrastructure for a faster build
+      cache: bundler
+      before_script:
+        - chmod +x ./ciscripts/site-gem-vulnerability-test/cibuild
       script:
-        - cd ./site
-        - bundler install
-        - bundle-audit update
-        - bundle-audit check
+        - ./ciscripts/site-gem-vulnerability-test/cibuild
+
+    - language: ruby
+      rvm: 2.6
+      name: Site Proofing
+      sudo: false # route your build to the container-based infrastructure for a faster build
+      cache: bundler
+      env:
+        global:
+          - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up installation of html-proofer
+      addons:
+        apt:
+          packages:
+            - libcurl4-openssl-dev
+      before_script:
+        - chmod +x ./ciscripts/site-proofing
+      script:
+        - ./ciscripts/site-proofing
