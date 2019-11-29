@@ -6,8 +6,6 @@
 # Add to a job within .travis.yml
 #      env:
 #        - SEARCH_DIRECTORIES="site"
-#      before_install:
-#        - chmod +x ./hack/travis/travis-check-files-changed.sh
 #      install:
 #        - ./hack/travis/travis-check-files-changed.sh $SEARCH_DIRECTORIES ; RETURN_CODE=$? ; if [ $RETURN_CODE -eq 137 ]; then travis_terminate 0; elif [ $RETURN_CODE -ne 0 ]; then travis_terminate $RETURN_CODE; fi
 
